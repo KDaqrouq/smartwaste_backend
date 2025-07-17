@@ -12,6 +12,7 @@ class InventoryItem(models.Model):
         USED: 'Used',
         EXPIRED: 'Expired',
         THROWN: 'Thrown',
+        AVAILABLE: 'Available',
     }
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)

@@ -63,7 +63,7 @@ def expiring_soon(request):
     today = date.today()
     three_days = today + timedelta(days=3)
 
-    expiring_items = InventoryItem.objects.filter(user=request.user, expiration_date__gte=today,
-                                                  expiration_date__lte=three_days)
+    expiring_items = InventoryItem.objects.filter(user=request.user, expiry_date__gte=today,
+                                                  expiry_date__lte=three_days)
     serializer = InventoryItemSerializer(expiring_items, many=True)
     return Response(serializer.data)
