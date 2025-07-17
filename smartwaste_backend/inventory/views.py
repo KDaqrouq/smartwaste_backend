@@ -8,6 +8,8 @@ from django.shortcuts import get_object_or_404
 from .models import InventoryItem
 from .serializers import InventoryItemSerializer
 
+from datetime import date, timedelta
+
 class YourOwnAPIView(APIView):
     authentication_classes = [XSessionTokenAuthentication]
     permission_classes = [permissions.IsAuthenticated]
@@ -20,7 +22,7 @@ class YourOwnAPIView(APIView):
 @api_view(['GET', 'POST'])
 @authentication_classes([XSessionTokenAuthentication])
 @permission_classes([permissions.IsAuthenticated])
-def inventory_list_create(request):
+def inventory_create_read(request):
     if request.method == 'GET':
         items = InventoryItem.objects.filter(user=request.user)
         serializer = InventoryItemSerializer(items, many=True)
@@ -33,10 +35,12 @@ def inventory_list_create(request):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    return Response({"detail": "Method not allowed."}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
 @api_view(['PUT', 'DELETE'])
 @authentication_classes([XSessionTokenAuthentication])
 @permission_classes([permissions.IsAuthenticated])
-def inventory_detail(request, pk):
+def inventory_update_delete(request, pk):
     item = get_object_or_404(InventoryItem, pk=pk, user=request.user)
 
     if request.method == 'PUT':
@@ -49,3 +53,17 @@ def inventory_detail(request, pk):
     elif request.method == 'DELETE':
         item.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+    return Response({"detail": "Method not allowed."}, status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
+@api_view(['GET'])
+@authentication_classes([XSessionTokenAuthentication])
+@permission_classes([permissions.IsAuthenticated])
+def expiring_soon(request):
+    today = date.today()
+    three_days = today + timedelta(days=3)
+
+    expiring_items = InventoryItem.objects.filter(user=request.user, expiration_date__gte=today,
+                                                  expiration_date__lte=three_days)
+    serializer = InventoryItemSerializer(expiring_items, many=True)
+    return Response(serializer.data)
