@@ -1,9 +1,7 @@
 from django.db import models
+from django.contrib.auth import get_user_model
 
-# Create your models here.
-
-class User(models.Model):
-    pass
+User = get_user_model()
 
 class InventoryItem(models.Model):
     AVAILABLE = 'AV'
