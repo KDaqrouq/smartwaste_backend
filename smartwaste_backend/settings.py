@@ -11,7 +11,10 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+
 import dj_database_url
+import os
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -20,12 +23,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-a2njegxy62f$viwi5ek$zx(c-fl)#s80r*ci&s8jqv=dilwv*o'
+SECRET_KEY = os.environ.get("SECRET_KEY") #'django-insecure-a2njegxy62f$viwi5ek$zx(c-fl)#s80r*ci&s8jqv=dilwv*o'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DEBUG', False).lower() == "true" #True
 
-ALLOWED_HOSTS = ["localhost", "backend", "127.0.0.1"]
+ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS").split(" ") #["localhost", "backend", "127.0.0.1"]
 
 # Application definition
 
@@ -98,7 +101,8 @@ DATABASES = {
     }
 }
 
-DATABASES['default'] = dj_database_url.parse("postgresql://smartwaste_django_render_user:SNTGWHP35Rku0BpDg9VoHbmG5bNV6wPa@dpg-d2b0cnadbo4c73ablbmg-a.oregon-postgres.render.com/smartwaste_django_render")
+database_url = os.environ.get('DATABASE_URL')
+DATABASES['default'] = dj_database_url.parse(database_url)
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
