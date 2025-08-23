@@ -12,6 +12,9 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 
+import dj_database_url
+import os
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -20,12 +23,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-a2njegxy62f$viwi5ek$zx(c-fl)#s80r*ci&s8jqv=dilwv*o'
+SECRET_KEY = os.environ.get("SECRET_KEY") #'django-insecure-a2njegxy62f$viwi5ek$zx(c-fl)#s80r*ci&s8jqv=dilwv*o'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DEBUG', "False").lower() == "true" #True
 
-ALLOWED_HOSTS = ["localhost", "backend", "127.0.0.1"]
+ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "localhost 127.0.0.1").split(" ") #["localhost", "backend", "127.0.0.1"]
 
 # Application definition
 
@@ -42,6 +45,8 @@ INSTALLED_APPS = [
     'allauth.headless',
 
     'rest_framework',
+
+    'fcm_django',
 
     'inventory',
 ]
@@ -87,16 +92,24 @@ WSGI_APPLICATION = 'smartwaste_backend.wsgi.application'
 #    }
 #}
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'smartwaste_db',
-        'USER': 'postgres',
-        'PASSWORD': 'smartwaste',
-        'HOST': 'localhost',
-        'PORT': '5432',
+database_url = os.environ.get('DATABASE_URL')
+
+if database_url:
+    DATABASES = {
+        'default': dj_database_url.parse(database_url)
     }
-}
+else:
+    # fallback to local settings
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'smartwaste_db',
+            'USER': 'postgres',
+            'PASSWORD': 'smartwaste',
+            'HOST': 'localhost',
+            'PORT': '5432',
+        }
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
@@ -157,3 +170,5 @@ ACCOUNT_EMAIL_VERIFICATION = "none"
 ACCOUNT_LOGIN_METHODS = {"email"}
 ACCOUNT_LOGOUT_ON_PASSWORD_CHANGE = False
 ACCOUNT_SIGNUP_FIELDS = ["email*","username*", "password1*","password2*"]
+
+FIREBASE_SERVICE_ACCOUNT_FILE = BASE_DIR / "serviceAccountKey.json"
