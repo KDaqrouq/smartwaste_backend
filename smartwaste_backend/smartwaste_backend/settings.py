@@ -48,7 +48,7 @@ INSTALLED_APPS = [
 
     'fcm_django',
 
-    'inventory',
+    'smartwaste_backend.inventory',
 ]
 
 MIDDLEWARE = [
