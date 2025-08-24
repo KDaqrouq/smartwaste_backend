@@ -11,7 +11,7 @@ from .serializers import InventoryItemSerializer
 from datetime import date, timedelta
 
 from fcm_django.models import FCMDevice
-from smartwaste_backend.smartwaste_backend.utils.firebase import send_push_v1
+from smartwaste_backend.utils.firebase import send_push_v1
 
 class YourOwnAPIView(APIView):
     authentication_classes = [XSessionTokenAuthentication]

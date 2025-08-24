@@ -48,7 +48,7 @@ INSTALLED_APPS = [
 
     'fcm_django',
 
-    'smartwaste_backend.inventory',
+    'inventory',
 ]
 
 MIDDLEWARE = [
@@ -62,7 +62,7 @@ MIDDLEWARE = [
     'allauth.account.middleware.AccountMiddleware',
 ]
 
-ROOT_URLCONF = "smartwaste_backend.smartwaste_backend.urls"
+ROOT_URLCONF = "smartwaste_backend.urls"
 
 TEMPLATES = [
     {
@@ -79,7 +79,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'smartwaste_backend.smartwaste_backend.wsgi.application'
+WSGI_APPLICATION = 'smartwaste_backend.wsgi.application'
 
 
 # Database
