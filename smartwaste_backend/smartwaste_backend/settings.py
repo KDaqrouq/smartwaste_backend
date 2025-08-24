@@ -62,7 +62,7 @@ MIDDLEWARE = [
     'allauth.account.middleware.AccountMiddleware',
 ]
 
-ROOT_URLCONF = 'smartwaste_backend.urls'
+ROOT_URLCONF = "smartwaste_backend.smartwaste_backend.urls"
 
 TEMPLATES = [
     {
