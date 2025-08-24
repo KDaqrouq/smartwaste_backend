@@ -79,7 +79,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'smartwaste_backend.wsgi.application'
+WSGI_APPLICATION = 'smartwaste_backend.smartwaste_backend.wsgi.application'
 
 
 # Database
