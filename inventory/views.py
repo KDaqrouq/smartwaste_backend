@@ -13,6 +13,8 @@ from datetime import date, timedelta
 from fcm_django.models import FCMDevice
 from smartwaste_backend.utils.firebase import send_push_v1
 
+from google import genai
+
 class YourOwnAPIView(APIView):
     authentication_classes = [XSessionTokenAuthentication]
     permission_classes = [permissions.IsAuthenticated]
@@ -154,3 +156,47 @@ def analytics_score(request):
         sustainability_score = (items_used_count / total_considered) * 100
 
     return Response({"sustainability_score": round(sustainability_score, 2)})
+
+@api_view(['POST'])
+@authentication_classes([XSessionTokenAuthentication])
+@permission_classes([permissions.IsAuthenticated])
+def ai_recommendations(request):
+    user = request.user
+    items = InventoryItem.objects.filter(user=user)
+
+    STATUS_MAP = {
+        "AV": "Available",
+        "US": "Used",
+        "EX": "Expired",
+        "TH": "Thrown"
+    }
+
+    history = []
+    for item in items:
+        history.append({
+            "item": item.product_name,
+            "status": STATUS_MAP.get(item.status, item.status),
+            "quantity": item.quantity,
+            "expiry_date": item.expiry_date.strftime("%Y-%m-%d"),
+        })
+
+    prompt = f"""
+    Here is the food waste history for a user:
+
+    {history}
+
+    Please analyze and provide:
+    1. Which items are most frequently wasted.
+    2. Suggestions for reducing waste (smaller portions, alternatives, etc.).
+    3. Personalized purchase recommendations.
+    """
+
+    client = genai.Client(api_key=settings.GEMINI_API_KEY)
+
+    response = client.models.generate_content(
+    model="gemini-2.5-flash", contents=prompt
+    )
+
+    return Response({
+        "ai_suggestions": response.text
+    })

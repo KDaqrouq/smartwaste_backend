@@ -1,7 +1,8 @@
 from django.urls import path
 from .views import (YourOwnAPIView, inventory_create_read, inventory_update_delete,
                     expiring_soon, fcm_token, notify_expiring_soon,
-                    analytics_summary, analytics_score)
+                    analytics_summary, analytics_score,
+                    ai_recommendations)
 
 urlpatterns = [
     path('protected/', YourOwnAPIView.as_view()),
@@ -15,5 +16,6 @@ urlpatterns = [
 
     path('analytics/summary/', analytics_summary),
     path('analytics/sustainability-score/', analytics_score),
+    path('ai/recommendations/', ai_recommendations),
 ]
 

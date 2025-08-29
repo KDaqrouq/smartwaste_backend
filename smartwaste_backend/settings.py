@@ -172,3 +172,5 @@ ACCOUNT_LOGOUT_ON_PASSWORD_CHANGE = False
 ACCOUNT_SIGNUP_FIELDS = ["email*","username*", "password1*","password2*"]
 
 FIREBASE_SERVICE_ACCOUNT_FILE = BASE_DIR / "serviceAccountKey.json"
+
+GEMINI_API_KEY = os.environ.get('GEMINI_API_KEY')
