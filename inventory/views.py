@@ -14,6 +14,7 @@ from fcm_django.models import FCMDevice
 from smartwaste_backend.utils.firebase import send_push_v1
 
 from google import genai
+from django.conf import settings
 
 class YourOwnAPIView(APIView):
     authentication_classes = [XSessionTokenAuthentication]
