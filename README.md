@@ -1,6 +1,6 @@
-# SmartWaste – AI-Powered Food Waste Tracker
+## SmartWaste – AI-Powered Food Waste Tracker 
 
-**SmartWaste** is a mobile-friendly food waste tracking application that helps users manage their groceries, reduce waste, and optimize purchases using AI-powered insights.
+**SmartWaste** is a mobile-friendly food waste tracking application that leverages AI-powered insights to help users manage groceries, minimize waste, and optimize purchasing habits.
 
 [GitHub Repository](https://github.com/KDaqrouq/smartwaste_backend)
 
@@ -8,129 +8,132 @@
 
 ## Table of Contents
 
-- [Features](#features)  
-- [Tech Stack](#tech-stack)  
-- [Installation](#installation)  
-- [Usage](#usage)  
-- [API Endpoints](#api-endpoints)  
-- [AI Insights](#ai-insights)  
-- [Deployment](#deployment)  
-- [Contributors](#contributors)  
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [Installation](#installation)
+- [Usage](#usage)
+- [API Endpoints](#api-endpoints)
+- [AI Insights](#ai-insights)
+- [Deployment](#deployment)
+- [Contributors](#contributors)
 
 ---
 
 ## Features
 
-- Track grocery inventory with CRUD operations  
-- Barcode scanning for quick item addition  
-- Smart reminders and push notifications for expiring items  
-- AI-powered insights to identify frequently wasted items  
-- Personalized purchase suggestions to reduce waste  
-- Token-based authentication using Django Allauth  
-- Deployed backend for reliable cloud availability  
+*   **Grocery Inventory Management:** Comprehensive CRUD operations for tracking food items.
+*   **Barcode Scanning:** Quickly add items using barcode recognition.
+*   **Smart Reminders & Notifications:** Receive push notifications for expiring items.
+*   **AI-Powered Waste Analysis:** Identify frequently wasted items through intelligent insights.
+*   **Personalized Suggestions:** Get recommendations for optimized purchases to reduce waste.
+*   **Secure Authentication:** Token-based authentication powered by Django Allauth.
+*   **Cloud Availability:** Reliably deployed backend for seamless access.
 
 ---
 
 ## Tech Stack
 
-- **Backend:** Django, Django REST Framework, PostgreSQL  
-- **AI Integration:** Google Gemini API  
-- **Push Notifications:** FCM with `fcm-django`  
-- **Deployment:** Render  
-- **Mobile Frontend:** Flutter  
+*   **Backend:** Django, Django REST Framework, PostgreSQL
+*   **AI Integration:** Google Gemini API
+*   **Push Notifications:** FCM with `fcm-django`
+*   **Deployment:** Render
+*   **Mobile Frontend:** Flutter
 
 ---
 
 ## Installation
 
-1. Clone the repository:
+To get started with SmartWaste, follow these steps:
 
-- git clone https://github.com/KDaqrouq/smartwaste_backend.git
-- cd smartwaste_backend
-  
-2. Create a virtual environment:
+1.  **Clone the repository:**
+    ```bash
+    git clone https://github.com/KDaqrouq/smartwaste_backend.git
+    cd smartwaste_backend
+    ```
 
-- python -m venv venv
-- source venv/bin/activate  # On Windows: venv\Scripts\activate
+2.  **Create a virtual environment:**
+    ```bash
+    python -m venv venv
+    source venv/bin/activate  # On Windows: `venv\Scripts\activate`
+    ```
 
-3. Install dependencies:
+3.  **Install dependencies:**
+    ```bash
+    pip install -r requirements.txt
+    ```
 
-- pip install -r requirements.txt
+4.  **Set up the database:**
+    ```bash
+    python manage.py makemigrations
+    python manage.py migrate
+    ```
 
-4. Set up the database:
+5.  **Create a superuser:**
+    ```bash
+    python manage.py createsuperuser
+    ```
 
-- python manage.py makemigrations
-- python manage.py migrate
-
-5. Create a superuser:
-
-- python manage.py createsuperuser
-
-6. Add your Gemini API key in settings.py:
-
-- GEMINI_API_KEY = "YOUR_API_KEY_HERE"
+6.  **Add your Gemini API key:**
+    Open `settings.py` and add your Google Gemini API key:
+    ```python
+    GEMINI_API_KEY = "YOUR_API_KEY_HERE"
+    ```
 
 ---
 
 ## API Endpoints
-Inventory CRUD:
 
-GET /api/ – List user’s items
+### Inventory CRUD
 
-POST /api/ – Add a new item
+*   **`GET /api/`**: List user’s inventory items.
+*   **`POST /api/`**: Add a new item to the inventory.
+*   **`PUT /api/<id>/`**: Update an existing item by ID.
+*   **`DELETE /api/<id>/`**: Delete an item by ID.
 
-PUT /api/<id>/ – Update an item
+### Notifications
 
-DELETE /api/<id>/ – Delete an item
+*   **`GET /expiring/notify/`**: Trigger notifications for expiring items.
 
-Notifications:
+### Device Registration (FCM)
 
-GET /expiring/notify/ – Notify users of expiring items
+*   **`POST /fcm/token/`**: Register mobile devices for push notifications.
 
-Device Registration (FCM):
+### AI Recommendations
 
-POST /fcm/token/ – Register mobile device for push notifications
-
-AI Recommendations:
-
-POST /ai/recommendations/ – Get personalized purchase and waste reduction suggestions
+*   **`POST /ai/recommendations/`**: Get personalized purchase and waste reduction suggestions.
 
 ---
 
 ## AI Insights
 
-Collects a user’s inventory and waste history
+SmartWaste's AI integration with the Google Gemini API provides intelligent insights by:
 
-Sends structured data to Google Gemini API
+*   Collecting a user’s inventory and waste history.
+*   Sending structured data to the Google Gemini API for analysis.
+*   Returning actionable recommendations.
 
-Returns:
+**Example Response:**
 
-Most frequently wasted items
-
-Recommendations for smaller portions or alternatives
-
-Optimized purchase habits
-
-Example Response:
-
+```json
 {
   "frequent_waste": ["Milk", "Bread"],
   "suggestions": ["Buy smaller milk cartons", "Consider frozen bread"],
-  "purchase_habits": ["Buy fruits in smaller batches", "Track expiry dates"]
+  "purchase_habits": ["Buy fruits in smaller batches", "Track expiry dates carefully"]
 }
+```
 
 ---
 
 ## Deployment
-Deployed backend on Render for cloud hosting
 
-Continuous deployment ensures updates from GitHub are reflected automatically
+The backend of SmartWaste is deployed on [Render](https://render.com/) for cloud hosting. Key deployment features include:
 
-Scalable architecture supports multiple users with reliable push notifications
+*   **Continuous Deployment:** Automatic updates are reflected from GitHub.
+*   **Scalable Architecture:** Supports multiple users with reliable push notifications.
 
 ---
 
 ## Contributors
-Khaled Daqrouq – Backend, AI Integration, API Development, Deployment
 
-Partner Name – Frontend, Mobile App Development, UI/UX Design
+*   **Khaled Daqrouq** – Backend Development, AI Integration, API Development, Deployment.
+*   **[Partner Name]** – Frontend Development, Mobile App Development, UI/UX Design.
