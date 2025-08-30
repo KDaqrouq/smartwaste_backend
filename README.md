@@ -126,7 +126,7 @@ SmartWaste's AI integration with the Google Gemini API provides intelligent insi
 
 ## Deployment
 
-The backend of SmartWaste is deployed on [Render](https://render.com/) for cloud hosting. Key deployment features include:
+The backend of SmartWaste is deployed on [Render](https://smartwaste-backend-render.onrender.com/) for cloud hosting. Key deployment features include:
 
 *   **Continuous Deployment:** Automatic updates are reflected from GitHub.
 *   **Scalable Architecture:** Supports multiple users with reliable push notifications.
@@ -136,4 +136,4 @@ The backend of SmartWaste is deployed on [Render](https://render.com/) for cloud
 ## Contributors
 
 *   **Khaled Daqrouq** – Backend Development, AI Integration, API Development, Deployment.
-*   **[Partner Name]** – Frontend Development, Mobile App Development, UI/UX Design.
+*   **[Ahmed Ghandour](https://github.com/Agent-boi)** – Frontend Development, Mobile App Development, UI/UX Design.
