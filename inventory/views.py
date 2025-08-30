@@ -201,3 +201,64 @@ def ai_recommendations(request):
     return Response({
         "ai_suggestions": response.text
     })
+
+OFF_URL_TMPL = "https://world.openfoodfacts.org/api/v0/product/{barcode}.json"
+
+def normalize_off(barcode, prod: dict):
+    nutr = prod.get("nutriments", {}) or {}
+    def g(key):
+        try:
+            return float(nutr.get(key)) if nutr.get(key) is not None else None
+        except ValueError:
+            return None
+
+    kcal = g("energy-kcal_100g")
+    if kcal is None and g("energy_100g") is not None:
+        try:
+            kcal = float(nutr["energy_100g"]) / 4.184
+        except Exception:
+            kcal = None
+
+    return {
+        "barcode": barcode,
+        "name": prod.get("product_name") or "Unknown item",
+        "brand": (prod.get("brands") or "").split(",")[0].strip() if prod.get("brands") else "",
+        "quantity": prod.get("quantity") or "",
+        "images": [prod.get("image_front_url")] if prod.get("image_front_url") else [],
+        "nutrients": {
+            "per": "100 g",
+            "energy_kcal": kcal,
+            "protein_g": g("proteins_100g"),
+            "fat_g": g("fat_100g"),
+            "carbohydrates_g": g("carbohydrates_100g"),
+            "sugars_g": g("sugars_100g"),
+            "sodium_mg": (g("sodium_100g") * 1000) if g("sodium_100g") else None,
+        },
+        "ingredients": prod.get("ingredients_text", "").split(", "),
+        "allergens": [a.split(":")[-1] for a in (prod.get("allergens_tags") or [])],
+        "categories": [c.split(":")[-1] for c in (prod.get("categories_tags") or [])],
+        "source": "open_food_facts",
+    }
+
+@api_view(["POST"])
+def item_lookup(request):
+    code = request.data.get("barcode")
+    if not code or not code.isdigit():
+        return Response({"detail": "Invalid barcode"}, status=status.HTTP_400_BAD_REQUEST)
+
+    # Query Open Food Facts
+    url = OFF_URL_TMPL.format(barcode=code)
+    try:
+        resp = requests.get(url, timeout=6)
+        if resp.status_code != 200:
+            return Response({"detail": "Lookup failed"}, status=status.HTTP_502_BAD_GATEWAY)
+        data = resp.json()
+    except Exception:
+        return Response({"detail": "External API error"}, status=status.HTTP_502_BAD_GATEWAY)
+
+    if data.get("status") != 1:
+        return Response({"detail": "Not found"}, status=status.HTTP_404_NOT_FOUND)
+
+    product = data["product"]
+    normalized = normalize_off(code, product)
+    return Response(normalized, status=status.HTTP_200_OK)
