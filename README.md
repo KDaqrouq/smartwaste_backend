@@ -2,7 +2,7 @@
 
 **SmartWaste** is a mobile-friendly food waste tracking application that helps users manage their groceries, reduce waste, and optimize purchases using AI-powered insights.
 
-[GitHub Repository](https://github.com/Agent-boi/SmartWaste)
+[GitHub Repository](https://github.com/KDaqrouq/smartwaste_backend)
 
 ---
 
@@ -46,8 +46,8 @@
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/Agent-boi/SmartWaste.git
-cd SmartWaste
+git clone https://github.com/KDaqrouq/smartwaste_backend.git
+cd smartwaste_backend
 Create a virtual environment:
 
 bash
