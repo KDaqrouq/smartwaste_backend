@@ -25,7 +25,7 @@ class InventoryItem(models.Model):
     product_name = models.CharField(max_length=100)
     expiry_date = models.DateField()
     quantity = models.PositiveIntegerField()
-    unit = models.CharField(max_length=100)
+    unit = models.CharField(max_length=20, default="g")
     status = models.CharField(
         max_length=2,
         choices=STATUS_CHOICES,
