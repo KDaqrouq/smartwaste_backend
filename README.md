@@ -45,70 +45,60 @@
 
 1. Clone the repository:
 
-```bash
-git clone https://github.com/KDaqrouq/smartwaste_backend.git
-cd smartwaste_backend
-Create a virtual environment:
+- git clone https://github.com/KDaqrouq/smartwaste_backend.git
+- cd smartwaste_backend
+  
+2. Create a virtual environment:
 
-bash
-Copy code
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-Install dependencies:
+- python -m venv venv
+- source venv/bin/activate  # On Windows: venv\Scripts\activate
 
-bash
-Copy code
-pip install -r requirements.txt
-Set up the database:
+3. Install dependencies:
 
-bash
-Copy code
-python manage.py makemigrations
-python manage.py migrate
-Create a superuser:
+- pip install -r requirements.txt
 
-bash
-Copy code
-python manage.py createsuperuser
-Add your Gemini API key in settings.py:
+4. Set up the database:
 
-python
-Copy code
-GEMINI_API_KEY = "YOUR_API_KEY_HERE"
-Usage
-Start the server locally:
+- python manage.py makemigrations
+- python manage.py migrate
 
-bash
-Copy code
-python manage.py runserver
-Access the API via http://localhost:8000/api/
+5. Create a superuser:
 
-Use a Flutter mobile app to interact with the backend
+- python manage.py createsuperuser
 
-API Endpoints
+6. Add your Gemini API key in settings.py:
+
+- GEMINI_API_KEY = "YOUR_API_KEY_HERE"
+
+---
+
+## API Endpoints
 Inventory CRUD:
 
-GET /inventory/ – List user’s items
+GET /api/ – List user’s items
 
-POST /inventory/ – Add a new item
+POST /api/ – Add a new item
 
-PUT /inventory/<id>/ – Update an item
+PUT /api/<id>/ – Update an item
 
-DELETE /inventory/<id>/ – Delete an item
+DELETE /api/<id>/ – Delete an item
 
 Notifications:
 
-GET /notify-expiring/ – Notify users of expiring items
+GET /expiring/notify/ – Notify users of expiring items
 
 Device Registration (FCM):
 
-POST /register-device-token/ – Register mobile device for push notifications
+POST /fcm/token/ – Register mobile device for push notifications
 
 AI Recommendations:
 
-POST /ai-recommendations/ – Get personalized purchase and waste reduction suggestions
+POST /ai/recommendations/ – Get personalized purchase and waste reduction suggestions
 
-AI Insights
+---
+
+## AI Insights
+
 Collects a user’s inventory and waste history
 
 Sends structured data to Google Gemini API
@@ -123,21 +113,24 @@ Optimized purchase habits
 
 Example Response:
 
-json
-Copy code
 {
   "frequent_waste": ["Milk", "Bread"],
   "suggestions": ["Buy smaller milk cartons", "Consider frozen bread"],
   "purchase_habits": ["Buy fruits in smaller batches", "Track expiry dates"]
 }
-Deployment
+
+---
+
+## Deployment
 Deployed backend on Render for cloud hosting
 
 Continuous deployment ensures updates from GitHub are reflected automatically
 
 Scalable architecture supports multiple users with reliable push notifications
 
-Contributors
+---
+
+## Contributors
 Khaled Daqrouq – Backend, AI Integration, API Development, Deployment
 
 Partner Name – Frontend, Mobile App Development, UI/UX Design
