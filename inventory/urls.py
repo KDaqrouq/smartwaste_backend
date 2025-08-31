@@ -17,7 +17,9 @@ urlpatterns = [
 
     path('analytics/summary/', analytics_summary),
     path('analytics/sustainability-score/', analytics_score),
+
     path('ai/recommendations/', ai_recommendations),
+
     path('items/lookup/', item_lookup)
 ]
 

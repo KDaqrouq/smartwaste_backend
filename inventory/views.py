@@ -16,6 +16,8 @@ from smartwaste_backend.utils.firebase import send_push_v1
 from google import genai
 from django.conf import settings
 
+import requests
+
 class YourOwnAPIView(APIView):
     authentication_classes = [XSessionTokenAuthentication]
     permission_classes = [permissions.IsAuthenticated]
@@ -186,10 +188,20 @@ def ai_recommendations(request):
 
     {history}
 
-    Please analyze and provide:
-    1. Which items are most frequently wasted.
-    2. Suggestions for reducing waste (smaller portions, alternatives, etc.).
-    3. Personalized purchase recommendations.
+    Please provide your analysis in strict JSON format **exactly like this**:
+
+    {{
+      "frequent_waste": ["Item1", "Item2"],
+      "suggestions": ["Suggestion1", "Suggestion2"],
+      "purchase_habits": ["Habit1", "Habit2"]
+    }}
+
+    Where:
+    - "frequent_waste" is a list of the items most frequently wasted.
+    - "suggestions" is a list of actionable tips to reduce waste.
+    - "purchase_habits" is a list of personalized purchasing recommendations based on the user's history.
+
+    **Important:** Only output valid JSON. Do not include any explanations or extra text.
     """
 
     client = genai.Client(api_key=settings.GEMINI_API_KEY)
