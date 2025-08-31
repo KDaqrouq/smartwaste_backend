@@ -198,9 +198,11 @@ def ai_recommendations(request):
 
     Where:
     - "frequent_waste" is a list of the items most frequently wasted.
-    - "suggestions" is a list of actionable tips to reduce waste.
+    - "suggestions" is a list of actionable for reducing waste (smaller portions, alternatives, etc.) based on user's history
     - "purchase_habits" is a list of personalized purchasing recommendations based on the user's history.
-
+    
+    Make each of these recommendations no more than 3 items each and no longer than 15 words per item.
+    
     **Important:** Only output valid JSON. Do not include any explanations or extra text.
     """
 
