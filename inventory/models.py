@@ -8,12 +8,6 @@ class InventoryItem(models.Model):
     USED = 'US'
     EXPIRED = "EX"
     THROWN = "TH"
-    #STATUS_CHOICES = {
-        #USED: 'Used',
-        #EXPIRED: 'Expired',
-        #THROWN: 'Thrown',
-        #AVAILABLE: 'Available',
-    #}
     STATUS_CHOICES = [
         (AVAILABLE, 'Available'),
         (USED, 'Used'),
@@ -21,11 +15,25 @@ class InventoryItem(models.Model):
         (THROWN, 'Thrown'),
     ]
 
+    FRUIT = "FR"
+    VEGETABLE = "VE"
+    MEAT = "MT"
+    DAIRY = "DA"
+    OTHER = "OT"
+    CATEGORY_CHOICES = [
+        (FRUIT, "Fruit"),
+        (VEGETABLE, "Vegetable"),
+        (MEAT, "Meat"),
+        (DAIRY, "Dairy"),
+        (OTHER, "Other"),
+    ]
+
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     product_name = models.CharField(max_length=100)
     expiry_date = models.DateField()
     quantity = models.PositiveIntegerField()
     unit = models.CharField(max_length=20, default="g")
+    category = models.CharField(max_length=2, default=OTHER, choices=CATEGORY_CHOICES)
     status = models.CharField(
         max_length=2,
         choices=STATUS_CHOICES,

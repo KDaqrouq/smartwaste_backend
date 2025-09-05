@@ -3,7 +3,8 @@ from .views import (YourOwnAPIView, inventory_create_read, inventory_update_dele
                     expiring_soon, fcm_token, notify_expiring_soon,
                     analytics_summary, analytics_score,
                     ai_recommendations,
-                    item_lookup)
+                    item_lookup,
+                    filter_category)
 
 urlpatterns = [
     path('protected/', YourOwnAPIView.as_view()),
@@ -20,6 +21,8 @@ urlpatterns = [
 
     path('ai/recommendations/', ai_recommendations),
 
-    path('items/lookup/', item_lookup)
+    path('items/lookup/', item_lookup),
+
+    path('filter/category/', filter_category)
 ]
 

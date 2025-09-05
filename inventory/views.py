@@ -281,3 +281,12 @@ def item_lookup(request):
     product = data["product"]
     normalized = normalize_off(code, product)
     return Response(normalized, status=status.HTTP_200_OK)
+
+def filter_category(request):
+    category = request.GET.get("category")
+    items = InventoryItem.objects.filter(user=request.user)
+
+    if category:
+        items = items.filter(category=category)
+
+    return Response({"items": list(items.values())})
