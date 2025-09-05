@@ -233,7 +233,6 @@ def ai_recommendations(request):
         "ai_suggestions": response.text
     })
 
-
 @api_view(['POST'])
 @authentication_classes([XSessionTokenAuthentication])
 @permission_classes([permissions.IsAuthenticated])
@@ -248,20 +247,65 @@ def eat_me_first(request):
         "TH": "Thrown"
     }
 
+    STATUS_MAP2 = {
+        "FR": "Fruit",
+        "VE": "Vegetable",
+        "MT": "Metal",
+        "DA": "Dairy",
+        "OT": "OTHER"
+    }
+
     history = []
     for item in items:
         history.append({
             "item": item.product_name,
             "status": STATUS_MAP.get(item.status, item.status),
+            "category": STATUS_MAP2.get(item.category, item.category),
             "quantity": item.quantity,
             "expiry_date": item.expiry_date.strftime("%Y-%m-%d"),
         })
 
+    data = json.loads(request.body)
+    waste_history = data.get("waste_history")
+
     prompt = f"""
-    Here is the food waste history for a user:
+    You are a smart food assistant AI. Your task is to create an “Eat-Me-First” list from a user's food inventory.
+    Each item has a name, status, category, quantity, and expiry date.
+
+    Here is the user’s inventory:
 
     {history}
+    
+    Here is the user’s frequently wasted items:
 
+    {waste_history}
+    
+    Your task:
+    1. Rank the items by priority for consumption (1 = eat first). Consider:
+       - Items that expire sooner should have higher priority.
+       - Items the user frequently wastes should have higher priority.
+       - Meal habits (from last_used or inferred from waste history) should adjust priority.
+    2. Provide **suggested ways to consume** each item (e.g., recipes, freezing, immediate use).
+    3. Return the results in JSON format, with the following structure:
+
+    [
+      {{
+        "item": "Milk",
+        "quantity": "1L",
+        "expiry_date": "2025-09-10",
+        "category": "Dairy",
+        "priority": 1,
+        "suggested_use": "Drink with breakfast or use in recipes"
+      }},
+      {{
+        "item": "Spinach",
+        "quantity": "200g",
+        "expiry_date": "2025-09-08",
+        "category": "Produce",
+        "priority": 2,
+        "suggested_use": "Add to salad or cook in omelet"
+      }}
+    ]
     """
 
     client = genai.Client(api_key=settings.GEMINI_API_KEY)
