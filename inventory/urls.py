@@ -23,7 +23,7 @@ urlpatterns = [
 
     path('items/lookup/', item_lookup),
 
-    path('filter/category/', filter_category)
+    path('filter/category/', filter_category),
 
     path('ai/recommendations/ranking/', eat_me_first),
 ]
