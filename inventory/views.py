@@ -265,8 +265,7 @@ def eat_me_first(request):
             "expiry_date": item.expiry_date.strftime("%Y-%m-%d"),
         })
 
-    data = json.loads(request.body)
-    waste_history = data.get("waste_history")
+    waste_history = request.data.get("waste_history")
 
     prompt = f"""
     You are a smart food assistant AI. Your task is to create an “Eat-Me-First” list from a user's food inventory.
