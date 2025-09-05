@@ -160,6 +160,18 @@ def analytics_score(request):
 
     return Response({"sustainability_score": round(sustainability_score, 2)})
 
+@api_view(['GET'])
+@authentication_classes([XSessionTokenAuthentication])
+@permission_classes([permissions.IsAuthenticated])
+def filter_category(request):
+    category = request.GET.get("category")
+    items = InventoryItem.objects.filter(user=request.user)
+
+    if category:
+        items = items.filter(category=category)
+
+    return Response({"items": list(items.values())})
+
 @api_view(['POST'])
 @authentication_classes([XSessionTokenAuthentication])
 @permission_classes([permissions.IsAuthenticated])
@@ -215,6 +227,47 @@ def ai_recommendations(request):
 
     response = client.models.generate_content(
     model="gemini-2.5-flash", contents=prompt
+    )
+
+    return Response({
+        "ai_suggestions": response.text
+    })
+
+
+@api_view(['POST'])
+@authentication_classes([XSessionTokenAuthentication])
+@permission_classes([permissions.IsAuthenticated])
+def eat_me_first(request):
+    user = request.user
+    items = InventoryItem.objects.filter(user=user)
+
+    STATUS_MAP = {
+        "AV": "Available",
+        "US": "Used",
+        "EX": "Expired",
+        "TH": "Thrown"
+    }
+
+    history = []
+    for item in items:
+        history.append({
+            "item": item.product_name,
+            "status": STATUS_MAP.get(item.status, item.status),
+            "quantity": item.quantity,
+            "expiry_date": item.expiry_date.strftime("%Y-%m-%d"),
+        })
+
+    prompt = f"""
+    Here is the food waste history for a user:
+
+    {history}
+
+    """
+
+    client = genai.Client(api_key=settings.GEMINI_API_KEY)
+
+    response = client.models.generate_content(
+        model="gemini-2.5-flash", contents=prompt
     )
 
     return Response({
@@ -281,12 +334,3 @@ def item_lookup(request):
     product = data["product"]
     normalized = normalize_off(code, product)
     return Response(normalized, status=status.HTTP_200_OK)
-
-def filter_category(request):
-    category = request.GET.get("category")
-    items = InventoryItem.objects.filter(user=request.user)
-
-    if category:
-        items = items.filter(category=category)
-
-    return Response({"items": list(items.values())})
