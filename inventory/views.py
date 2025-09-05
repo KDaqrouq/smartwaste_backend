@@ -198,8 +198,13 @@ def ai_recommendations(request):
 
     Where:
     - "frequent_waste" is a list of the items most frequently wasted.
-    - "suggestions" is a list of actionable for reducing waste (smaller portions, alternatives, etc.) based on user's history
-    - "purchase_habits" is a list of personalized purchasing recommendations based on the user's history.
+    - "suggestions" a list of actionable, short-term steps the user can take to reduce waste with their current items (e.g., storage tips, portion adjustments, alternative uses).
+    - "purchase_habits" a list of long-term, future-oriented shopping recommendations based on the user's history (e.g., buy smaller packs, switch to frozen alternatives, avoid bulk purchases).
+    
+    Make sure:
+    - "suggestions" focus on **what to do now** with existing food.
+    - "purchase_habits" focus on **what to buy differently next time**.
+    - Keep lists practical, concise, and user-friendly.
     
     Make each of these recommendations no more than 3 items each and no longer than 15 words per item.
     
