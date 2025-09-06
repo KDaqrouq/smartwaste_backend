@@ -25,6 +25,7 @@
 *   **Barcode Scanning:** Quickly add items using barcode recognition.
 *   **Smart Reminders & Notifications:** Receive push notifications for expiring items.
 *   **AI-Powered Waste Analysis:** Identify frequently wasted items through intelligent insights.
+*   **AI-Powered “Eat-Me-First” Ranking**: Dynamic daily prioritization of items to consume first, based on expiry dates, waste history, and meal habits.
 *   **Personalized Suggestions:** Get recommendations for optimized purchases to reduce waste.
 *   **Secure Authentication:** Token-based authentication powered by Django Allauth.
 *   **Cloud Availability:** Reliably deployed backend for seamless access.
@@ -101,6 +102,12 @@ To get started with SmartWaste, follow these steps:
 ### AI Recommendations
 
 *   **`POST /ai/recommendations/`**: Get personalized purchase and waste reduction suggestions.
+
+### AI Eat-Me-First Ranking
+
+*   **`POST ai/recommendations/ranking/`**: Generate a ranked list of items that should be consumed first.  
+    * Prioritization is based on expiry dates, waste history, and inferred meal habits.  
+    * Response includes suggested uses for each item to minimize waste.  
 
 ---
 
