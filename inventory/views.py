@@ -104,6 +104,7 @@ def fcm_token(request):
 def notify_expiring_soon(request):
     today = date.today()
     three_days = today + timedelta(days=3)
+    user = request.user
 
     # Group items by user
     users_with_expiring = {}
