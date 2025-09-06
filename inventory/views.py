@@ -98,9 +98,9 @@ def fcm_token(request):
     )
     return Response({"success": True})
 
-
 @api_view(["GET"])
-# make auth here for cron job
+@authentication_classes([XSessionTokenAuthentication])
+@permission_classes([permissions.IsAuthenticated])
 def notify_expiring_soon(request):
     today = date.today()
     three_days = today + timedelta(days=3)
@@ -355,6 +355,8 @@ def normalize_off(barcode, prod: dict):
         "source": "open_food_facts",
     }
 
+@authentication_classes([XSessionTokenAuthentication])
+@permission_classes([permissions.IsAuthenticated])
 @api_view(["POST"])
 def item_lookup(request):
     code = request.data.get("barcode")
