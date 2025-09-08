@@ -118,7 +118,7 @@ def notify_expiring_soon(request):
 
     # Send notifications
     for user, items_list in users_with_expiring.items():
-        item_names = ", ".join(i.name for i in items_list)
+        item_names = ", ".join(i.product_name for i in items_list)
         message = f"Expiring soon: {item_names}"
 
         for device in FCMDevice.objects.filter(user=user):
