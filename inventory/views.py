@@ -219,7 +219,7 @@ def ai_recommendations(request):
     - "purchase_habits" focus on **what to buy differently next time**.
     - Keep lists practical, concise, and user-friendly.
     
-    Make each of these recommendations no more than 3 items each and no longer than 15 words per item.
+    Make each of these recommendations no more than 3 items each and no longer than 15 words per item. Except for frequent_waste, make that one 5 items.
     
     **Important:** Only output valid JSON. Do not include any explanations or extra text.
     """
