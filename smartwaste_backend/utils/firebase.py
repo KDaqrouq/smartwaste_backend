@@ -1,6 +1,9 @@
 from django.conf import settings
 import firebase_admin
 from firebase_admin import credentials, messaging
+import logging
+
+logger = logging.getLogger(__name__)
 
 if not firebase_admin._apps:
     cred = credentials.Certificate(settings.FIREBASE_SERVICE_ACCOUNT_FILE)
@@ -15,4 +18,10 @@ def send_push_v1(device_token:str, title:str, body:str):
             body=body,
         )
     )
-    return messaging.send(message)
+    try:
+        response = messaging.send(message)
+        logger.info(f"✅ Successfully sent push to {device_token[:12]}...: {response}")
+        return response
+    except Exception as e:
+        logger.error(f"❌ Error sending push to {device_token[:12]}...: {e}", exc_info=True)
+        raise
