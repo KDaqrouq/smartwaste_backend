@@ -171,6 +171,9 @@ ACCOUNT_LOGIN_METHODS = {"email"}
 ACCOUNT_LOGOUT_ON_PASSWORD_CHANGE = False
 ACCOUNT_SIGNUP_FIELDS = ["email*","username*", "password1*","password2*"]
 
-FIREBASE_SERVICE_ACCOUNT_FILE = BASE_DIR / "serviceAccountKey.json"
+FIREBASE_SERVICE_ACCOUNT_FILE = os.getenv(
+    "FIREBASE_SERVICE_ACCOUNT_FILE",
+    "/etc/secrets/serviceAccountKey.json"
+)
 
 GEMINI_API_KEY = os.environ.get('GEMINI_API_KEY')
