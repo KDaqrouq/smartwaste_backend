@@ -110,7 +110,8 @@ def notify_expiring_soon(request):
     users_with_expiring = {}
     items = InventoryItem.objects.filter(
         expiry_date__gte=today,
-        expiry_date__lte=three_days
+        expiry_date__lte=three_days,
+        status="AV"
     ).select_related("user")
 
     for item in items:
