@@ -380,3 +380,7 @@ def item_lookup(request):
     product = data["product"]
     normalized = normalize_off(code, product)
     return Response(normalized, status=status.HTTP_200_OK)
+
+@api_view(["GET"])
+def ping(request):
+    return Response({"detail": "OK"}, status=status.HTTP_200_OK)
