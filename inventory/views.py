@@ -8,7 +8,7 @@ from django.shortcuts import get_object_or_404
 from .models import InventoryItem
 from .serializers import InventoryItemSerializer
 
-from datetime import date, timedelta
+from datetime import date, timedelta, datetime
 
 from fcm_django.models import FCMDevice
 from smartwaste_backend.utils.firebase import send_push_v1
@@ -69,7 +69,7 @@ def inventory_update_delete(request, pk):
 @permission_classes([permissions.IsAuthenticated])
 def expiring_soon(request):
     today = date.today()
-    three_days = today + timedelta(days=3)
+    three_days = today + timedelta(days=5)
 
     expiring_items = InventoryItem.objects.filter(user=request.user, expiry_date__gte=today,
                                                   expiry_date__lte=three_days)
@@ -103,7 +103,7 @@ def fcm_token(request):
 @permission_classes([permissions.IsAuthenticated])
 def notify_expiring_soon(request):
     today = date.today()
-    three_days = today + timedelta(days=3)
+    three_days = today + timedelta(days=5)
     user = request.user
 
     # Group items by user
@@ -385,3 +385,42 @@ def item_lookup(request):
 @api_view(["GET"])
 def ping(request):
     return Response({"detail": "OK"}, status=status.HTTP_200_OK)
+
+@api_view(["POST"])
+@authentication_classes([XSessionTokenAuthentication])
+@permission_classes([permissions.IsAuthenticated])
+def mark_used(request, pk):
+    item = get_object_or_404(InventoryItem, pk=pk, user=request.user)
+
+    if item.status != InventoryItem.AVAILABLE:
+        return Response(
+            {"detail": "Item is not available"},
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
+    item.status = InventoryItem.USED
+    item.action_at = datetime.now()
+    item.save(update_fields=["status", "action_at", "updated_at"])
+
+    return Response(InventoryItemSerializer(item).data, status=status.HTTP_200_OK)
+
+@api_view(["POST"])
+@authentication_classes([XSessionTokenAuthentication])
+@permission_classes([permissions.IsAuthenticated])
+def mark_thrown(request, pk):
+    item = get_object_or_404(InventoryItem, pk=pk, user=request.user)
+
+    if item.status != InventoryItem.AVAILABLE:
+        return Response(
+            {"detail": "Item is not available"},
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
+    item.status = InventoryItem.THROWN
+    item.action_at = datetime.now()
+    item.save(update_fields=["status", "action_at", "updated_at"])
+
+    return Response(
+        InventoryItemSerializer(item).data,
+        status=status.HTTP_200_OK
+    )

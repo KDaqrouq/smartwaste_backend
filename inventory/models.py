@@ -41,3 +41,4 @@ class InventoryItem(models.Model):
     )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    action_at = models.DateTimeField(null=True, blank=True)
