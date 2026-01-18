@@ -29,7 +29,7 @@ urlpatterns = [
 
     path('ai/recommendations/ranking/', eat_me_first),
 
-    path('ping/', ping)
+    path('ping/', ping),
 
     path('<int:pk>/used/', mark_used),
     path('<int:pk>/thrown/', mark_thrown),
