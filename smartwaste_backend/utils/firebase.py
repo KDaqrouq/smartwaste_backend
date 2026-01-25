@@ -8,6 +8,7 @@ if not firebase_admin._apps:
 
 def send_push_v1(device_token:str, title:str, body:str):
     """Send FCM HTTP v1 push using Admin SDK."""
+    
     message = messaging.Message(
         token=device_token,
         notification=messaging.Notification(

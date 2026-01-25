@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'fcm_django',
 
     'inventory',
+    'allauth.socialaccount.providers.google',
 ]
 
 MIDDLEWARE = [
@@ -168,7 +169,7 @@ AUTHENTICATION_BACKENDS = ("allauth.account.auth_backends.AuthenticationBackend"
 
 ACCOUNT_EMAIL_VERIFICATION = "none"
 ACCOUNT_LOGIN_METHODS = {"email"}
-ACCOUNT_LOGOUT_ON_PASSWORD_CHANGE = False
+ACCOUNT_LOGOUT_ON_PASSWORD_CHANGE = True
 ACCOUNT_SIGNUP_FIELDS = ["email*","username*", "password1*","password2*"]
 
 FIREBASE_SERVICE_ACCOUNT_FILE = os.getenv(

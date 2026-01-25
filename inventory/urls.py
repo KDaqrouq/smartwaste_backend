@@ -6,7 +6,8 @@ from .views import (YourOwnAPIView, inventory_create_read, inventory_update_dele
                     item_lookup,
                     filter_category,
                     ping,
-                    mark_used, mark_thrown)
+                    ocr_expiry,
+                    expired_available_items)
 
 urlpatterns = [
     path('protected/', YourOwnAPIView.as_view()),
@@ -17,6 +18,7 @@ urlpatterns = [
     path('expiring/items/', expiring_soon),
     path('fcm/token/', fcm_token),
     path('expiring/notify/', notify_expiring_soon),
+    path("expiring/expired/", expired_available_items),
 
     path('analytics/summary/', analytics_summary),
     path('analytics/sustainability-score/', analytics_score),
@@ -31,7 +33,6 @@ urlpatterns = [
 
     path('ping/', ping),
 
-    path('<int:pk>/used/', mark_used),
-    path('<int:pk>/thrown/', mark_thrown),
+    path("ocr/", ocr_expiry),
 ]
 
