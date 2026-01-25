@@ -23,7 +23,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get("SECRET_KEY") #'django-insecure-a2njegxy62f$viwi5ek$zx(c-fl)#s80r*ci&s8jqv=dilwv*o'
+SECRET_KEY = os.environ.get("SECRET_KEY") # 'django-insecure-a2njegxy62f$viwi5ek$zx(c-fl)#s80r*ci&s8jqv=dilwv*o'
+# delete the comment from github
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', "False").lower() == "true" #True
@@ -39,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    "django.contrib.sites",
 
     'allauth',
     'allauth.account',
@@ -49,6 +51,7 @@ INSTALLED_APPS = [
     'fcm_django',
 
     'inventory',
+    'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
 ]
 
@@ -178,3 +181,21 @@ FIREBASE_SERVICE_ACCOUNT_FILE = os.getenv(
 )
 
 GEMINI_API_KEY = os.environ.get('GEMINI_API_KEY')
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'SCOPE': [
+            'profile',
+            'email',
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'online',
+        },
+        'OAUTH_PKCE_ENABLED': True,
+    }
+}
+
+AUTHENTICATION_BACKENDS = [
+    "django.contrib.auth.backends.ModelBackend",
+    "allauth.account.auth_backends.AuthenticationBackend",
+]

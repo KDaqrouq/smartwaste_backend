@@ -5,7 +5,6 @@ from rest_framework.decorators import api_view, authentication_classes, permissi
 from rest_framework import status, permissions
 from django.shortcuts import get_object_or_404
 
-from smartwaste_backend.utils.image_extract import extract_text_from_image
 from .models import InventoryItem
 from .serializers import InventoryItemSerializer
 
@@ -18,9 +17,6 @@ from google import genai
 from django.conf import settings
 
 import requests
-
-import pytesseract
-from PIL import Image
 
 class YourOwnAPIView(APIView):
     authentication_classes = [XSessionTokenAuthentication]
@@ -394,46 +390,50 @@ def ping(request):
 @authentication_classes([XSessionTokenAuthentication])
 @permission_classes([permissions.IsAuthenticated])
 def ocr_expiry(request):
-    """
-    Accepts an image, runs OCR, then asks Gemini to find the expiry date.
-    """
     image = request.FILES.get("image")
     if not image:
-        return Response({"detail": "Image file 'image' is required."},
-                        status=status.HTTP_400_BAD_REQUEST)
-
-    # 1) OCR
-    ocr_text = extract_text_from_image(image)
-
-    prompt = f"""
-    You are given OCR text from a food package. Extract the expiry date if present.
-
-    OCR TEXT:
-    \"\"\"{ocr_text}\"\"\"
-
-    Rules:
-    - Return ONLY a JSON object, no extra text.
-    - If you find an expiry date, return it in ISO format: YYYY-MM-DD.
-    - If no expiry date is found, set expiry_date to null.
-
-    Example output:
-    {{
-      "expiry_date": "2026-01-15",
-      "raw_text": "{ocr_text.replace('"', "'")[:200]}..."
-    }}
-    """
+        return Response(
+            {"detail": "Image file is required"},
+            status=status.HTTP_400_BAD_REQUEST
+        )
 
     client = genai.Client(api_key=settings.GEMINI_API_KEY)
 
+    prompt = """
+    You are given an image of a food package.
+
+    Tasks:
+    1. Read all visible text on the package (OCR).
+    2. Identify the expiry date (EXP / Best Before / Use By).
+    3. Return ONLY valid JSON.
+
+    Rules:
+    - If an expiry date exists, return it in ISO format: YYYY-MM-DD
+    - If no expiry date is found, set expiry_date to null
+    - Do NOT guess dates
+
+    Output format:
+    {
+      "expiry_date": "YYYY-MM-DD | null",
+      "confidence": "high | medium | low",
+      "notes": "short explanation if needed"
+    }
+    """
+
     response = client.models.generate_content(
-    model="gemini-2.5-flash", contents=prompt
+        model="gemini-2.5-flash",
+        contents=[
+            prompt,
+            {
+                "mime_type": image.content_type,
+                "data": image.read(),
+            },
+        ],
     )
 
-    # response.text should be JSON string according to the prompt
     return Response({
-        "ocr_text": ocr_text,
-        "ai_result": response.text
-    })
+        "result": response.text
+    }, status=status.HTTP_200_OK)
 
 @api_view(["GET"])
 @authentication_classes([XSessionTokenAuthentication])
